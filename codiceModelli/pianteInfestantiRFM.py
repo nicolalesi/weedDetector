@@ -81,23 +81,23 @@ print(classification_report(y_val, y_val_pred, target_names=[str(c) for c in le.
 
 # Applica SMOTE per generare nuovi campioni della classe minoritaria
 #smote = SMOTE(sampling_strategy='auto', random_state=42)
-X_test_resampled, y_test_resampled = smote.fit_resample(X_test, y_test)
+#X_test_resampled, y_test = smote.fit_resample(X_test, y_test)
 
-print("Distribuzione dopo SMOTE test:", np.bincount(y_train_resampled))
+#print("Distribuzione dopo SMOTE test:", np.bincount(y_train_resampled))
 
 # Predizioni sul test set
-y_pred = rf_model.predict(X_test_resampled)
+y_pred = rf_model.predict(X_test)
 print("Classi previste:", np.unique(y_pred))
 
 # Report di valutazione
 target_names = [str(class_name) for class_name in le.classes_]
-print("Accuracy:", accuracy_score(y_test_resampled, y_pred))
-print(classification_report(y_test_resampled, y_pred, target_names=target_names, zero_division=0))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred, target_names=target_names, zero_division=0))
 
 # Salva il modello Random Forest
 joblib.dump(rf_model, '../modelliGenerati/random_forest_plant_classifier.pkl')
 
 # Salva le metriche su un file
 with open('../MetricheModelli/RFMetriche.txt', 'w') as f:
-    f.write("Accuracy: " + str(accuracy_score(y_test_resampled, y_pred)) + "\n\n")
-    f.write("Classification Report:\n" + classification_report(y_test_resampled, y_pred))
+    f.write("Accuracy: " + str(accuracy_score(y_test, y_pred)) + "\n\n")
+    f.write("Classification Report:\n" + classification_report(y_test, y_pred))

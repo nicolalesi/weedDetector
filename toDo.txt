@@ -1,11 +1,8 @@
-- Aggiungere Validation a SVM, KNN ...
-- Stampare più metriche nella CNN
-- Se riusciamo salvare anche il tempo necessario all'addestramento, per ogni momento
-- Obiettivo : avere a disposizione le stesse metriche per poter stabilire, almeno su carta quale è il modello migliore per la classificazione delle piante
-- Capire quanto è oneroso scrivere dei loadModel per ognuno
-- Testare che i modelli utilzzati facciano correttamente quello che vogliamo
-- L'errore "Precision is ill-defined and being set to 0.0 in labels with no predicted samples" indica che almeno una classe presente nel test set (y_test) non è stata mai prevista dal modello (y_pred).
-Alla luce di ciò e del fatto che il dataset potrebbe essere sbilanciato capire se fare il tuning oppure se creare nuove immagini con data augmentation
--Fare documentazione
-- Comportamento particolare della random forest, predice una sola classe
-- Capire se il dataset è sbilanciato
+DONE - Aggiungere Validation a SVM, KNN ...
+TODO - Stampare più metriche nella CNN
+TODO - Se riusciamo salvare anche il tempo necessario all'addestramento, per ogni momento
+TODO Capire quanto è oneroso scrivere dei loadModel per ognuno
+DONE - L'errore "Precision is ill-defined and being set to 0.0 in labels with no predicted samples" indica che almeno una classe presente nel test set (y_test) non è stata mai prevista dal modello (y_pred). SI RISOLVE SOLO AGGIUNGENDO CAMPIONI AL TEST
+DONE -Alla luce di ciò e del fatto che il dataset potrebbe essere sbilanciato capire se fare il tuning oppure se creare nuove immagini con data augmentation
+TODO -Fare documentazione
+TODO - Rifare le metriche dei modelli facendo il tuning e salvandole in file dai nomi diversi e con sotto i parametri utilizzati (vedi esempio KNNMetriche_Manhattan)
