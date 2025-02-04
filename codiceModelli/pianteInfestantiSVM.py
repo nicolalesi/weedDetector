@@ -12,6 +12,8 @@ train_dataset_path = 'dataset/WeedCrop.v1i.yolov5pytorch/train/images'
 train_labels_path = 'dataset/WeedCrop.v1i.yolov5pytorch/train/labels'
 test_dataset_path = 'dataset/WeedCrop.v1i.yolov5pytorch/test/images'
 test_labels_path = 'dataset/WeedCrop.v1i.yolov5pytorch/test/labels'
+valid_dataset_path = 'dataset/WeedCrop.v1i.yolov5pytorch/valid/images'
+valid_labels_path = 'dataset/WeedCrop.v1i.yolov5pytorch/valid/labels'
 
 # Load training images and labels
 train_images = []
