@@ -64,7 +64,7 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
 print("Distribuzione dopo SMOTE:", np.bincount(y_train_resampled))
 
 # Inizializza e allena il modello SVM
-svm_model = SVC(kernel='rbf', C=10, gamma=0.01, probability=True)
+svm_model = SVC(kernel='linear', C=10, gamma=0.01, probability=True)
 svm_model.fit(X_train_resampled, y_train_resampled)
 
 # Predizioni sul validation set
