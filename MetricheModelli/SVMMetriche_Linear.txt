@@ -9,3 +9,5 @@ Classification Report:
     accuracy                           0.73       424
    macro avg       0.73      0.72      0.72       424
 weighted avg       0.73      0.73      0.72       424
+
+svm_model = SVC(kernel='linear', C=10, gamma=0.01, probability=True)

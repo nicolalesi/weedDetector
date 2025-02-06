@@ -1,0 +1,13 @@
+Accuracy: 0.7806603773584906
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.74      0.89      0.81       219
+           1       0.85      0.66      0.75       205
+
+    accuracy                           0.78       424
+   macro avg       0.79      0.78      0.78       424
+weighted avg       0.79      0.78      0.78       424
+
+svm_model = SVC(kernel='poly', C=10, degree=3, probability=True)
