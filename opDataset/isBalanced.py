@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Directory del dataset di training
-train_dataset_path = '../dataset/WeedCrop.v1i.yolov5pytorch/train/images'
-train_labels_path = '../dataset/WeedCrop.v1i.yolov5pytorch/train/labels'
+train_dataset_path = '../dataset/WeedCrop.v1i.yolov5pytorch/test/images'
+train_labels_path = '../dataset/WeedCrop.v1i.yolov5pytorch/test/labels'
 
 # Lista per raccogliere le etichette delle classi
 train_labels = []

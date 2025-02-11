@@ -9,3 +9,11 @@ Classification Report:
     accuracy                           0.90       118
    macro avg       0.45      0.50      0.47       118
 weighted avg       0.81      0.90      0.85       118
+
+rf_model = RandomForestClassifier(
+    n_estimators=150,
+    max_depth=15, 
+    random_state=42,
+    class_weight="balanced"
+    )
+rf_model.fit(X_train_resampled, y_train_resampled)

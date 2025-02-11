@@ -6,16 +6,19 @@ from tensorflow.keras.applications import InceptionV3
 from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout, BatchNormalization
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import load_img, img_to_array, ImageDataGenerator
 from tensorflow.keras.callbacks import LearningRateScheduler, EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from tensorflow.keras.utils import to_categorical  # Aggiunto import
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 # Dataset paths
 dataset_path = '../dataset/WeedCrop.v1i.yolov5pytorch'
-train_path = os.path.join(dataset_path, 'train')
-valid_path = os.path.join(dataset_path, 'valid')
-test_path = os.path.join(dataset_path, 'test')
+train_path = os.path.join(dataset_path, 'train/images')
+train_label_path = os.path.join(dataset_path, 'train/labels')
+valid_path = os.path.join(dataset_path, 'valid/images')
+valid_label_path = os.path.join(dataset_path, 'valid/labels')
+test_path = os.path.join(dataset_path, 'test/images')
+test_label_path = os.path.join(dataset_path, 'test/labels')
 
 # Model parameters
 batch_size = 128
@@ -23,6 +26,56 @@ num_epochs = 10
 image_size = (139, 139)
 num_classes = 2
 learning_rate = 0.001
+
+# Funzione per caricare i dati YOLO
+def load_yolo_data(images_path, labels_path, image_size):
+    images = []
+    labels = []
+    image_files = sorted([f for f in os.listdir(images_path) if f.endswith(('.png', '.jpg', '.jpeg'))])
+
+    print(f"Numero di immagini trovate: {len(image_files)}")
+
+    for image_file in image_files:
+        # Carica l'immagine
+        img_path = os.path.join(images_path, image_file)
+        img = load_img(img_path, target_size=image_size)
+        img_array = img_to_array(img) / 255.0  # Normalizza l'immagine
+        images.append(img_array)
+
+        # Carica le etichette corrispondenti
+        label_file = os.path.splitext(image_file)[0] + '.txt'
+        label_path = os.path.join(labels_path, label_file)
+
+        if os.path.exists(label_path):
+            with open(label_path, 'r') as f:
+                label_data = f.readlines()
+                if label_data:
+                    class_id = int(label_data[0].split()[0])  # Il primo numero è la classe
+                    labels.append(class_id)
+                else:
+                    print(f"Etichetta vuota per l'immagine: {image_file}")
+                    labels.append(0)  # Assegna una classe predefinita (ad esempio, 0)
+        else:
+            print(f"Etichetta mancante per l'immagine: {image_file}")
+            labels.append(0)  # Assegna una classe predefinita (ad esempio, 0)
+
+    print(f"Numero di etichette caricate: {len(labels)}")
+    
+    return np.array(images), np.array(labels)
+
+
+# Carica i dati di addestramento
+X_train, y_train = load_yolo_data(train_path, train_label_path, image_size)
+X_valid, y_valid = load_yolo_data(valid_path, valid_label_path, image_size)
+X_test, y_test = load_yolo_data(test_path, test_label_path, image_size)
+
+# Codifica one-hot delle etichette
+y_train = to_categorical(y_train, num_classes=num_classes)
+y_valid = to_categorical(y_valid, num_classes=num_classes)
+y_test = to_categorical(y_test, num_classes=num_classes)
+
+# Bilanciamento delle classi: calcolare i pesi delle classi
+class_weights = {0: 1., 1: 1.}  # Default weights (uguali)
 
 # Data augmentation
 train_datagen = ImageDataGenerator(
@@ -39,32 +92,7 @@ train_datagen = ImageDataGenerator(
 valid_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-# Bilanciamento delle classi: calcolare i pesi delle classi
-class_weights = {0: 1., 1: 1.}  # Default weights (uguali)
-train_labels = [f for f in os.listdir(train_path) if os.path.isdir(os.path.join(train_path, f))]
-class_counts = {0: 0, 1: 0}
-
-# Calcolare il numero di immagini per ciascuna classe nel training set
-for label in train_labels:
-    class_counts[0] += len([f for f in os.listdir(os.path.join(train_path, label))])
-    class_counts[1] += len([f for f in os.listdir(os.path.join(train_path, label))])
-
-total_images = sum(class_counts.values())
-class_weights[0] = total_images / (2 * class_counts[0])  # Peso per la classe 0
-class_weights[1] = total_images / (2 * class_counts[1])  # Peso per la classe 1
-
-# Data generators
-train_dataset = train_datagen.flow_from_directory(
-    train_path, target_size=image_size, batch_size=batch_size, class_mode='categorical'
-)
-valid_dataset = valid_datagen.flow_from_directory(
-    valid_path, target_size=image_size, batch_size=batch_size, class_mode='categorical'
-)
-test_dataset = test_datagen.flow_from_directory(
-    test_path, target_size=image_size, batch_size=batch_size, class_mode='categorical'
-)
-
-# Load pre-trained InceptionV3 model
+# Model setup
 base_model = InceptionV3(weights='imagenet', include_top=False, input_shape=(*image_size, 3))
 for layer in base_model.layers:
     layer.trainable = False
@@ -99,10 +127,11 @@ callbacks = [
 
 # Train model with class weights
 history = model.fit(
-    train_dataset,
+    X_train, y_train,
     epochs=num_epochs,
-    validation_data=valid_dataset,
+    validation_data=(X_valid, y_valid),
     class_weight=class_weights,
+    batch_size=batch_size,
     callbacks=callbacks
 )
 
@@ -110,15 +139,19 @@ history = model.fit(
 model.save('../modelliGenerati/plant_disease_model_inception.h5')
 
 # Evaluate model
-test_labels = to_categorical(test_dataset.classes, num_classes=num_classes)  # Codifica one-hot delle etichette di test
-y_pred = model.predict(test_dataset)
+y_pred = model.predict(X_test)
 y_pred_classes = np.argmax(y_pred, axis=1)
-y_true = np.argmax(test_labels, axis=1)
+y_true = np.argmax(y_test, axis=1)
+
+print(np.unique(y_test, axis=0))  # Controlla che le etichette siano distribuite correttamente
+class_counts = np.unique(y_test, return_counts=True)
+print("Distribuzione delle classi nel test set:", class_counts)
+print("Prime 10 predizioni softmax:", y_pred[:10])
 
 # Calcolo metriche
 accuracy = accuracy_score(y_true, y_pred_classes)
 conf_matrix = confusion_matrix(y_true, y_pred_classes)
-class_report = classification_report(y_true, y_pred_classes, digits=4, output_dict=True)
+class_report = classification_report(y_true, y_pred_classes, digits=4)
 
 # Stampiamo i risultati
 print(f"Accuracy: {accuracy:.4f}")

@@ -1,0 +1,20 @@
+Accuracy: 0.5377358490566038
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.53      0.94      0.68       219
+           1       0.63      0.11      0.18       205
+
+    accuracy                           0.54       424
+   macro avg       0.58      0.52      0.43       424
+weighted avg       0.58      0.54      0.44       424
+
+# Inizializza e allena il modello Random Forest
+rf_model = RandomForestClassifier(
+    n_estimators=150,
+    max_depth=15, 
+    random_state=42,
+    class_weight="balanced"
+    )
+rf_model.fit(X_train_resampled, y_train_resampled)
