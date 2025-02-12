@@ -10,6 +10,4 @@ Classification Report:
    macro avg       0.81      0.80      0.80       424
 weighted avg       0.81      0.81      0.81       424
 
-# Inizializza e allena il modello SVM
 svm_model = SVC(kernel='rbf', C=10, gamma=0.01, probability=True)
-svm_model.fit(X_train_resampled, y_train_resampled)

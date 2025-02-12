@@ -7,14 +7,14 @@ import numpy as np
 import matplotlib.pyplot as plt 
 
 # Load your trained model
-model = tf.keras.models.load_model('./modelliGenerati/best_model.h5')  # Replace 'your_model_directory' with the path to your saved model
+model = tf.keras.models.load_model('./modelliGenerati/plant_disease_model_inception.h5')  # Replace 'your_model_directory' with the path to your saved model
 
 # Load and preprocess your image
-img_path = './dataset/pianteInfestanti/test/ridderzuring_3126_jpg.rf.8980b3ae3ec4ecd023aab5bc54c26089.jpg'  # Replace 'path_to_your_image.jpg' with your image file path
+img_path = './A_sunflower.jpg'  # Replace 'path_to_your_image.jpg' with your image file path
 img = image.load_img(img_path, target_size=(139, 139))  # Resize to match the input size of your model
 
 # Load and preprocess your image
-img_path = './dataset/pianteInfestanti/test/ridderzuring_3126_jpg.rf.8980b3ae3ec4ecd023aab5bc54c26089.jpg'  # Replace with the path to your image file
+img_path = './A_sunflower.jpg'  # Replace with the path to your image file
 img = tf.keras.preprocessing.image.load_img(img_path, target_size=(139, 139))  # Load the image and resize
 img_array = tf.keras.preprocessing.image.img_to_array(img)  # Convert image to array
 img_array = tf.image.resize(img_array, (139, 139))  # Resize the image to match the model's input size
@@ -23,7 +23,7 @@ img_array = tf.expand_dims(img_array, axis=0)  # Add a batch dimension
 # Get the predictions for the image
 predictions = model.predict(img_array)
 predicted_class = tf.argmax(predictions[0])
-
+print("CLASSE PREDETTA ",predicted_class)
 # Get the predictions for the image
 predictions = model.predict(img_array)
 predicted_class = np.argmax(predictions[0])

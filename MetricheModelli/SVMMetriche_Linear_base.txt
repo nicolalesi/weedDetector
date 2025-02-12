@@ -11,4 +11,3 @@ Classification Report:
 weighted avg       0.73      0.73      0.72       424
 
 svm_model = SVC(kernel='linear', C=10, gamma=0.01, probability=True)
-svm_model.fit(X_train_resampled, y_train_resampled)

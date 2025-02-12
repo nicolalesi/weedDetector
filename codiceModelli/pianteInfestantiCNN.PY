@@ -27,6 +27,7 @@ image_size = (139, 139)
 num_classes = 2
 learning_rate = 0.001
 
+classi=[0,0]
 # Funzione per caricare i dati YOLO
 def load_yolo_data(images_path, labels_path, image_size):
     images = []
@@ -52,6 +53,10 @@ def load_yolo_data(images_path, labels_path, image_size):
                 if label_data:
                     class_id = int(label_data[0].split()[0])  # Il primo numero è la classe
                     labels.append(class_id)
+                    if class_id==0:
+                        classi[0]=classi[0]+1
+                    elif class_id==1:
+                        classi[1]=classi[1]+1
                 else:
                     print(f"Etichetta vuota per l'immagine: {image_file}")
                     labels.append(0)  # Assegna una classe predefinita (ad esempio, 0)
@@ -76,6 +81,12 @@ y_test = to_categorical(y_test, num_classes=num_classes)
 
 # Bilanciamento delle classi: calcolare i pesi delle classi
 class_weights = {0: 1., 1: 1.}  # Default weights (uguali)
+
+# Calcolare il numero di immagini per ciascuna classe nel training set
+
+total_images = classi[0]+classi[1]
+class_weights[0] = total_images / (2 * classi[0])  # Peso per la classe 0
+class_weights[1] = total_images / (2 * classi[1])  # Peso per la classe 1
 
 # Data augmentation
 train_datagen = ImageDataGenerator(

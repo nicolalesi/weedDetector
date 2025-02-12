@@ -64,7 +64,7 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
 print("Distribuzione dopo SMOTE:", np.bincount(y_train_resampled))
 
 # Inizializza il modello KNN con parametri fissi
-knn_model = KNeighborsClassifier(n_neighbors=100, weights='distance', metric='euclidean')
+knn_model = KNeighborsClassifier(n_neighbors=100, weights='distance', metric='manhattan')
 knn_model.fit(X_train_resampled, y_train_resampled)
 
 # Predizioni sul validation set

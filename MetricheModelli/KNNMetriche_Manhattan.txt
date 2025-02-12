@@ -1,13 +1,11 @@
-Accuracy: 0.8813559322033898
+Accuracy: 0.5165094339622641
 
 Classification Report:
               precision    recall  f1-score   support
 
-           0       0.46      1.00      0.63        12
-           1       1.00      0.87      0.93       106
+           0       0.52      0.99      0.68       219
+           1       0.50      0.01      0.03       205
 
-    accuracy                           0.88       118
-   macro avg       0.73      0.93      0.78       118
-weighted avg       0.95      0.88      0.90       118
-
-knn_model = KNeighborsClassifier(n_neighbors=100, weights='distance', metric='manhattan')
+    accuracy                           0.52       424
+   macro avg       0.51      0.50      0.35       424
+weighted avg       0.51      0.52      0.36       424

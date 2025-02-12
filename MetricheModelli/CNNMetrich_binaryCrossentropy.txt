@@ -1,0 +1,22 @@
+Accuracy: 0.9434
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0     0.9803    0.9087    0.9431       219
+           1     0.9095    0.9805    0.9437       205
+
+    accuracy                         0.9434       424
+   macro avg     0.9449    0.9446    0.9434       424
+weighted avg     0.9461    0.9434    0.9434       424
+
+
+Confusion Matrix:
+[[199  20]
+ [  4 201]]
+
+model.compile(
+    loss='binary_crossentropy',
+    optimizer=Adam(learning_rate),
+    metrics=['accuracy']
+)
