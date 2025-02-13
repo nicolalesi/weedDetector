@@ -1,0 +1,27 @@
+Accuracy: 0.9528
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0     0.9854    0.9224    0.9528       219
+           1     0.9224    0.9854    0.9528       205
+
+    accuracy                         0.9528       424
+   macro avg     0.9539    0.9539    0.9528       424
+weighted avg     0.9549    0.9528    0.9528       424
+
+
+Confusion Matrix:
+[[202  17]
+ [  3 202]]
+
+outputs = Dense(num_classes, activation='sigmoid')(x)
+
+model = Model(inputs=base_model.input, outputs=outputs)
+
+# Compile model with class weights
+model.compile(
+    loss='binary_crossentropy',
+    optimizer=Adam(learning_rate),
+    metrics=['accuracy']
+)
