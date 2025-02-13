@@ -21,7 +21,7 @@ test_path = os.path.join(dataset_path, 'test/images')
 test_label_path = os.path.join(dataset_path, 'test/labels')
 
 # Model parameters
-batch_size = 128
+batch_size = 128 #Campioni dati preparati contemporaneamente prima di aggiornare i pesi
 num_epochs = 10
 image_size = (139, 139)
 num_classes = 2
@@ -114,13 +114,13 @@ x = GlobalAveragePooling2D()(x)
 x = Dense(256, activation='relu')(x)
 x = BatchNormalization()(x)
 x = Dropout(0.5)(x)
-outputs = Dense(num_classes, activation='softmax')(x)
+outputs = Dense(num_classes, activation='sigmoid')(x)
 
 model = Model(inputs=base_model.input, outputs=outputs)
 
 # Compile model with class weights
 model.compile(
-    loss='categorical_crossentropy',
+    loss='binary_crossentropy',
     optimizer=Adam(learning_rate),
     metrics=['accuracy']
 )

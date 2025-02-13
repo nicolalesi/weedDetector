@@ -18,7 +18,7 @@ from sklearn.model_selection import KFold
 # =====================
 # Impostazioni e paths
 # =====================
-dataset_path = '/Users/mariocorrente/Desktop/df_aum/dsbase'
+dataset_path = '../dataset/WeedCrop.v1i.yolov5pytorch'
 train_path = os.path.join(dataset_path, 'train/images')
 train_label_path = os.path.join(dataset_path, 'train/labels')
 valid_path = os.path.join(dataset_path, 'valid/images')

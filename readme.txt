@@ -1,4 +1,5 @@
 ######### Folder: MetricheModelli ##########
+-------------------------------------------------
 All'interno di questa folder è possibile trovare le metriche ottenute dal test dei modelli, possono essere diverse per lo stesso modello in base agli iper parametri usati,
 ad esempio "KNNMetriche_euclidean.txt" sono le metriche derivanti dal modello KNN addestrato utilizzando la distanza euclidea.
 Sono utili per il confronto tra modelli.
